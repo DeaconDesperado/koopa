@@ -10,15 +10,21 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 shandler.setFormatter(formatter)
 log.addHandler(shandler)
 
+WATCH_PATH = '/songs'
+
 class SongIndex:
+    
+    def __init__(self,path):
+        log.info('Watcher initiated for path %s',path)
+        self.path = path
 
     def __call__(self):
-        log.info('brack')
+        log.info('Checking %s for updates',self.path)
 
     @staticmethod
     def install():
-        log.info('activating periodic task')
-        t = task.LoopingCall(SongIndex())
+        log.info('activating periodic update task')
+        t = task.LoopingCall(SongIndex(WATCH_PATH))
         t.start(10.0)
 
 class UI(resource.Resource):
